@@ -1,1 +1,1 @@
-# Atari-Breakout-Game
+# Sample project to demostrate Rxjs functionality
