@@ -1,3 +1,4 @@
+import { Movie } from "./subjects";
 import { Observable, BehaviorSubject } from "rxjs";
 
 export interface Movie {
@@ -29,6 +30,18 @@ export let userInfo: UserInfo = {
 export function loadFromArray$() {
   return Observable.from(movies);
 }
+
+export function loadMoviesWithDelay$() {
+  let delay = 0;
+  return Observable.create((o: any) =>
+    movies.forEach(m =>
+      setTimeout(() => {
+        o.next(m);
+      }, (delay = delay + 500))
+    )
+  );
+}
+
 const userSubject = new BehaviorSubject<UserInfo>(userInfo);
 
 export const userInfo$ = userSubject.asObservable();
@@ -42,12 +55,13 @@ export function updasteisAuthenticated() {
   userSubject.next(u);
 }
 
-export function loadwithDelay(val:any) {
+export function loadwithDelay(val: any) {
   let oo: any;
-  let delay = Math.floor(Math.random()/4 * 100 + 1) * 100;
+  let delay = Math.floor(Math.random() / 4 * 100 + 1) * 100;
   // console.log(delay);
   setTimeout(() => {
     oo.next(val);
+    oo.complete();
   }, delay);
-  return Observable.create((o: any) => oo = o);
+  return Observable.create((o: any) => (oo = o));
 }
