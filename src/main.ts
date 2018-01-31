@@ -1,6 +1,7 @@
 import { Observable } from "rxjs";
 import * as fromSubjects from "./subjects";
 import { Movie } from "./subjects";
+import * as fromObservers from "./observers";
 
 let output = document.getElementById("output");
 let btnGetMoviews = document.getElementById("btn-get-movies");
@@ -26,9 +27,10 @@ btnLogin$.subscribe(
 );
 
 fromSubjects.userInfo$.subscribe(
-  (u: fromSubjects.UserInfo) => updateUI(u),
-  (e: any) => console.log(`error: ${e}`),
-  () => console.log("complete")
+  new fromObservers.CustomObserver(updateUI)
+  // (u: fromSubjects.UserInfo) => updateUI(u),
+  // (e: any) => console.log(`error: ${e}`),
+  // () => console.log("complete")
 );
 
 let clickGetMovies$ = Observable.fromEvent(btnGetMoviews, "click")
@@ -41,7 +43,7 @@ const movies$ = clickGetMovies$.switchMap(() =>
 
 movies$
   //.do(m => console.log(m))
-  .concatMap(x =>  Observable.of(x).delay(4400) )
+  //.concatMap(x => Observable.of(x).delay(4400))
   //.flatMap(x =>  Observable.of(x).delay(4400) )
   .subscribe(
     (m: Movie) => renderMovie(m),
